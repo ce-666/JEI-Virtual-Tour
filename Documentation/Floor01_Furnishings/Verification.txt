@@ -1,0 +1,8 @@
+PASS: all 24 original door openings remain unobstructed.
+PASS: both existing 2.40m clear corridors remain continuous.
+PASS: reception centre route from entrance to corridor.
+PASS: grouped classroom central aisle and cross aisle between all four table groups.
+PASS: teacher-suite entry, open social area, glass doorway and quiet-office workstation aisle.
+PASS: administrative-office entrance, print corner and records aisle.
+PASS: furnishing is restricted to N02, S01, S02 and S03. Other rooms retain the previous empty structural shell.
+Counts: grouped classroom 4 groups / 16 seats; quiet teacher office 8 workstations; shared open teacher meeting/lounge; minimal reception; administrative office 4 workstations and records/printing.

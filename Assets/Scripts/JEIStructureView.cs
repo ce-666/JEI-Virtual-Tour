@@ -5,6 +5,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Camera), typeof(AudioListener))]
 public class JEIStructureView : MonoBehaviour
 {
+    const float MinimumDistance = 7f;
+    const float MaximumDistance = 80f;
+    const float MinimumPitch = 20f;
+    const float MaximumPitch = 80f;
+
     public Transform target;
     public GameObject walkPlayer;
     public float distance = 48f;
@@ -21,14 +26,18 @@ public class JEIStructureView : MonoBehaviour
     AudioListener[] walkListeners;
     bool walking;
     GUIStyle hintStyle;
+    Transform initialFocusParent;
+    Vector3 fallbackFocus;
 
-    Vector3 FocusPoint { get { return target != null ? target.position : Vector3.zero; } }
+    Vector3 FocusPoint { get { return target != null ? target.position : fallbackFocus; } }
 
     void Start()
     {
         overviewCamera = GetComponent<Camera>();
         overviewListener = GetComponent<AudioListener>();
         overviewCamera.orthographic = false;
+        initialFocusParent = target != null ? target.parent : null;
+        fallbackFocus = FocusPoint;
 
         // Keep this component active in both modes so Tab can always return to overview.
         if (walkPlayer != null && (walkPlayer == gameObject || transform.IsChildOf(walkPlayer.transform)))
@@ -56,8 +65,8 @@ public class JEIStructureView : MonoBehaviour
                 yaw = Mathf.Atan2(-offset.x, -offset.z) * Mathf.Rad2Deg;
             }
         }
-        pitch = Mathf.Clamp(pitch, 20f, 80f);
-        distance = Mathf.Clamp(distance, 20f, 80f);
+        pitch = Mathf.Clamp(pitch, MinimumPitch, MaximumPitch);
+        distance = Mathf.Clamp(distance, MinimumDistance, MaximumDistance);
         overviewCamera.enabled = true;
         overviewListener.enabled = true;
         ReleaseCursor();
@@ -70,15 +79,33 @@ public class JEIStructureView : MonoBehaviour
             SetWalking(!walking);
 
         if (walking) return;
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null)
+        {
+            if (keyboard.digit0Key.wasPressedThisFrame)
+            {
+                SetFocus(new Vector3(0, 1, 0), 46f);
+                pitch = 43f;
+                yaw = -35f;
+            }
+            else if (keyboard.digit1Key.wasPressedThisFrame)
+                SetFocus(new Vector3(-5.025f, 1, 9.35f), 11f);
+            else if (keyboard.digit2Key.wasPressedThisFrame)
+                SetFocus(new Vector3(-10.55f, 1, -9.35f), 18f);
+            else if (keyboard.digit3Key.wasPressedThisFrame)
+                SetFocus(new Vector3(0, 1, -9.35f), 10f);
+            else if (keyboard.digit4Key.wasPressedThisFrame)
+                SetFocus(new Vector3(6.65f, 1, -9.35f), 11f);
+        }
         Mouse mouse = Mouse.current;
         if (mouse == null) return;
         if (mouse.leftButton.isPressed || mouse.rightButton.isPressed)
         {
             Vector2 delta = mouse.delta.ReadValue();
             yaw += delta.x * orbitSensitivity;
-            pitch = Mathf.Clamp(pitch - delta.y * orbitSensitivity, 20f, 80f);
+            pitch = Mathf.Clamp(pitch - delta.y * orbitSensitivity, MinimumPitch, MaximumPitch);
         }
-        distance = Mathf.Clamp(distance - mouse.scroll.ReadValue().y * zoomSensitivity, 20f, 80f);
+        distance = Mathf.Clamp(distance - mouse.scroll.ReadValue().y * zoomSensitivity, MinimumDistance, MaximumDistance);
     }
 
     void LateUpdate()
@@ -90,6 +117,16 @@ public class JEIStructureView : MonoBehaviour
     {
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0f);
         transform.SetPositionAndRotation(FocusPoint + rotation * Vector3.back * distance, rotation);
+    }
+
+    void SetFocus(Vector3 buildingLocalFocus, float requestedDistance)
+    {
+        Vector3 worldFocus = initialFocusParent != null
+            ? initialFocusParent.TransformPoint(buildingLocalFocus)
+            : buildingLocalFocus;
+        if (target != null) target.position = worldFocus;
+        fallbackFocus = worldFocus;
+        distance = Mathf.Clamp(requestedDistance, MinimumDistance, MaximumDistance);
     }
 
     void SetWalking(bool value)
@@ -134,10 +171,11 @@ public class JEIStructureView : MonoBehaviour
             hintStyle.normal.textColor = Color.white;
             hintStyle.padding = new RectOffset(11, 9, 8, 6);
         }
-        GUI.Box(new Rect(16, 16, 385, 65), GUIContent.none);
+        Rect hintRect = new Rect(16, 16, 385, walking ? 65 : 82);
+        GUI.Box(hintRect, GUIContent.none);
         string hint = walking
             ? "WALK MODE  |  WASD: move  |  Mouse: look\nEsc: free cursor  |  Tab: return to 3D overview"
-            : "3D OVERVIEW  |  Drag left / right mouse: orbit\nScroll: zoom  |  Tab: enter first-person tour";
-        GUI.Label(new Rect(16, 16, 385, 65), hint, hintStyle);
+            : "3D OVERVIEW  |  Drag: orbit  |  Scroll: zoom\nTab: enter first-person tour\n0: all  |  1: groups  |  2: teachers\n3: reception  |  4: admin";
+        GUI.Label(hintRect, hint, hintStyle);
     }
 }
