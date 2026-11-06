@@ -1,5 +1,8 @@
 # 学院楼一层户型草案 v01
 
+> 本目录保留第一阶段结构归档。最新 S03 北门已由 X=6.6m 右移至 X=7.3m；当前配置以 `Assets/JEI_Blockout/Floor01_Plan.json` 和场景为准，最新预览见 `Documentation/Floor01_Furnishings/`。
+
+
 ## 在 Unity 中查看三维草模
 
 打开 `Assets/Scenes/JEI_Floor01_Structure.unity`。Scene 视图默认使用三维透视，墙高 3.30 m、墙厚和完整双跑楼梯均为实际三维网格；保留开顶方便检查隔间。场景中的平面标注默认隐藏。

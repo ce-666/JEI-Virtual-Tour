@@ -28,7 +28,7 @@
   ],
   "walls": [
     {"axis":"H","at":5.9,"start":-17.85,"end":17.85,"external":false,"openings":[{"at":-10.7,"width":1.2,"kind":"door"},{"at":-5.0,"width":1.2,"kind":"door"},{"at":4.5,"width":1.5,"kind":"door"},{"at":13.3,"width":1.2,"kind":"door"}]},
-    {"axis":"H","at":-5.9,"start":-17.85,"end":17.85,"external":false,"openings":[{"at":-8.0,"width":1.2,"kind":"door"},{"at":0.0,"width":2.4,"kind":"door"},{"at":6.6,"width":1.2,"kind":"door"},{"at":13.3,"width":1.2,"kind":"door"}]},
+    {"axis":"H","at":-5.9,"start":-17.85,"end":17.85,"external":false,"openings":[{"at":-8.0,"width":1.2,"kind":"door"},{"at":0.0,"width":2.4,"kind":"door"},{"at":7.3,"width":1.2,"kind":"door"},{"at":13.3,"width":1.2,"kind":"door"}]},
     {"axis":"V","at":-9.3,"start":5.9,"end":12.85,"external":false,"openings":[]},
     {"axis":"V","at":-0.75,"start":5.9,"end":12.85,"external":false,"openings":[]},
     {"axis":"V","at":10.4,"start":5.9,"end":12.85,"external":false,"openings":[]},
