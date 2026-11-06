@@ -2,8 +2,9 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 /// <summary>
-/// S01: eight screened workstations inside full-height glazing, with a shared,
-/// open discussion and lounge area outside. Dimensions and positions are metres.
+/// S01: six screened workstations and a shared refreshment/printing cabinet
+/// inside full-height glazing, with an open discussion and lounge area outside.
+/// Dimensions and positions are metres.
 /// This builder only adds furniture; the structural shell remains untouched.
 /// </summary>
 public static class JEITeacherSuite
@@ -13,7 +14,7 @@ public static class JEITeacherSuite
 
     public static void Build(Transform parent)
     {
-        var suite = JEIFurnitureKit.Group(parent, "S01__Teacher_suite__8_quiet_workstations__open_discussion_and_lounge");
+        var suite = JEIFurnitureKit.Group(parent, "S01__Teacher_suite__6_quiet_workstations__refreshment_and_printing__open_discussion_and_lounge");
         BuildOfficeGlazing(suite);
         BuildQuietWorkstations(suite);
         BuildOpenDiscussion(suite);
@@ -22,57 +23,72 @@ public static class JEITeacherSuite
 
     static void BuildQuietWorkstations(Transform parent)
     {
-        var office = JEIFurnitureKit.Group(parent, "01__Quiet_office__8_individually_screened_workstations");
-        var fabric = JEIFurnitureKit.Mat("S01_Partition_Fabric", new Color(.29f, .45f, .46f), .08f);
-        var edge = JEIFurnitureKit.Mat("S01_Partition_Edge", new Color(.16f, .22f, .24f), .35f);
-        float[] islandX = { -15.9f, -11.75f };
+        var office = JEIFurnitureKit.Group(parent, "01__Quiet_office__6_warm_wood_writing_desks_along_south_and_west_windows");
+        var fabric = JEIFurnitureKit.Mat("Faculty_Privacy_Sage", new Color(.48f, .59f, .51f), .08f);
+        var edge = JEIFurnitureKit.Mat("Faculty_Privacy_Oak_Edge", new Color(.64f, .48f, .30f), .24f);
         int number = 1;
 
-        for (int island = 0; island < islandX.Length; island++)
+        // Four generous writing desks face the south windows. Chairs are tucked
+        // close enough to use the desk while keeping the central floor open.
+        float[] southX = { -15.9f, -13.95f, -12f, -10.05f };
+        for (int i = 0; i < southX.Length; i++)
         {
-            var cluster = JEIFurnitureKit.Group(office, "Four_person_workstation_island_" + (island + 1));
-            float centreX = islandX[island];
-            for (int row = 0; row < 2; row++)
-            {
-                bool north = row == 0;
-                float deskZ = north ? -9.45f : -10.15f;
-                float chairZ = north ? -8.4f : -11.2f;
-                float yaw = north ? 180 : 0;
-                for (int column = 0; column < 2; column++)
-                {
-                    float deskX = centreX + (column == 0 ? -.7f : .7f);
-                    var station = JEIFurnitureKit.Group(cluster, "Teacher_workstation_" + number++);
-                    JEIFurnitureKit.Desk(station, new Vector3(deskX, 0, deskZ), yaw, 1.4f, .7f, true);
-                    JEIFurnitureKit.Chair(station, new Vector3(deskX, 0, chairZ), yaw, true, "Navy");
-                }
-            }
-
-            // A cross of 1.25 m high screens gives every desk its own bay while
-            // retaining daylight and views through the glazed enclosure.
-            JEIFurnitureKit.Box(cluster, "Shared_fabric_privacy_screen__H1.25m",
-                new Vector3(centreX, .99f, -9.8f), new Vector3(2.8f, .52f, .05f), fabric);
-            JEIFurnitureKit.Box(cluster, "Individual_bay_dividers__H1.25m",
-                new Vector3(centreX, .99f, -9.8f), new Vector3(.05f, .52f, 1.4f), fabric);
-            JEIFurnitureKit.Box(cluster, "Horizontal_screen_top_edge",
-                new Vector3(centreX, 1.255f, -9.8f), new Vector3(2.83f, .025f, .055f), edge, false);
-            JEIFurnitureKit.Box(cluster, "Cross_screen_top_edge",
-                new Vector3(centreX, 1.255f, -9.8f), new Vector3(.055f, .025f, 1.4f), edge, false);
+            WritingStation(office, number++, new Vector3(southX[i], 0, -12.15f), 180, 1.8f, .8f,
+                new Vector3(southX[i], 0, -11.25f), i % 2 == 0 ? "Sage" : "Oatmeal");
+            if (i < southX.Length - 1)
+                SideScreen(office, "South_window_desk_side_screen__H1.12m",
+                    new Vector3((southX[i] + southX[i + 1]) / 2, .93f, -12.15f),
+                    new Vector3(.04f, .34f, .8f), fabric, edge);
         }
 
-        // Storage stays on the solid north wall, leaving a 1.6 m clear band
-        // behind the north-row task chairs and a continuous route to the door.
-        JEIFurnitureKit.Cabinet(office, new Vector3(-15.8f, 0, -6.30f), 1.5f, 1.15f);
-        JEIFurnitureKit.Cabinet(office, new Vector3(-13.9f, 0, -6.30f), 1.5f, 1.15f);
+        // Two west-window desks stay clear of the south row, with 1.03 m
+        // between the neighbouring task-chair envelopes at the southwest turn.
+        float[] westZ = { -7.9f, -9.6f };
+        for (int i = 0; i < westZ.Length; i++)
+            WritingStation(office, number++, new Vector3(-17.2f, 0, westZ[i]), -90, 1.6f, .8f,
+                new Vector3(-16.25f, 0, westZ[i]), i == 0 ? "Oatmeal" : "Sage");
+        SideScreen(office, "West_window_desk_side_screen__H1.12m",
+            new Vector3(-17.2f, .93f, -8.75f), new Vector3(.8f, .34f, .04f), fabric, edge);
+
+        // Full-height document storage occupies only the solid north wall.
+        // Together these measure 3.20 W x 2.10 H x 0.50 D metres; neither west
+        // nor south daylight openings receive tall furniture in front of them.
+        JEIFacultyFurniture.StorageCabinet(office, new Vector3(-16.2f, 0, -6.30f), 0, 1.6f, 2.1f, .5f);
+        JEIFacultyFurniture.StorageCabinet(office, new Vector3(-14.6f, 0, -6.30f), 0, 1.6f, 2.1f, .5f);
+
+        // The former north-wall pair of desks becomes one continuous cabinet:
+        // refreshment facilities on the left, an open worktop, printing on the right.
+        JEIFacultyAmenityCabinet.Build(office, new Vector3(-12.025f, 0, -6.36f), 3.55f, .62f);
+    }
+
+    static void WritingStation(Transform parent, int number, Vector3 deskPosition, float yaw,
+        float width, float depth, Vector3 chairPosition, string color)
+    {
+        var station = JEIFurnitureKit.Group(parent, "Teacher_workstation_" + number);
+        JEIFacultyFurniture.WritingDesk(station, deskPosition, yaw, width, depth);
+        JEIFacultyFurniture.StudyChair(station, chairPosition, yaw, true, color);
+    }
+
+    static void SideScreen(Transform parent, string name, Vector3 position, Vector3 size,
+        Material fabric, Material edge)
+    {
+        JEIFurnitureKit.Box(parent, name, position, size, fabric);
+        Vector3 railSize = size;
+        railSize.y = .02f;
+        railSize.x += .015f;
+        railSize.z += .015f;
+        position.y = 1.11f;
+        JEIFurnitureKit.Box(parent, "Warm_oak_screen_top_edge", position, railSize, edge, false);
     }
 
     static void BuildOpenDiscussion(Transform parent)
     {
         var discussion = JEIFurnitureKit.Group(parent, "02__Open_discussion__4_seats__no_enclosing_partition");
-        JEIFurnitureKit.Table(discussion, new Vector3(-5.4f, 0, -7.65f), 1.9f, .9f);
+        JEIFacultyFurniture.SocialTable(discussion, new Vector3(-5.4f, 0, -7.65f), 0, 1.9f, 1.05f);
         foreach (float x in new[] { -5.95f, -4.85f })
         {
-            JEIFurnitureKit.Chair(discussion, new Vector3(x, 0, -6.65f), 180, false, "Sand");
-            JEIFurnitureKit.Chair(discussion, new Vector3(x, 0, -8.65f), 0, false, "Teal");
+            JEIFacultyFurniture.StudyChair(discussion, new Vector3(x, 0, -6.65f), 180, false, "Oatmeal");
+            JEIFacultyFurniture.StudyChair(discussion, new Vector3(x, 0, -8.65f), 0, false, "Sage");
         }
 
         var frame = JEIFurnitureKit.Mat("S01_Whiteboard_Frame", new Color(.48f, .53f, .54f), .4f);

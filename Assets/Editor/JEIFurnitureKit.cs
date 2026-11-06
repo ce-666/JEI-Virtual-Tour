@@ -74,7 +74,7 @@ public static class JEIFurnitureKit
         if (!solid) UnityEngine.Object.DestroyImmediate(g.GetComponent<Collider>()); return g;
     }
 
-    static GameObject Primitive(Transform parent, string name, PrimitiveType type, Vector3 pos, Vector3 size, Material mat)
+    public static GameObject Primitive(Transform parent, string name, PrimitiveType type, Vector3 pos, Vector3 size, Material mat)
     {
         var g = GameObject.CreatePrimitive(type); g.name = name; g.transform.SetParent(parent, false);
         g.transform.localPosition = pos; g.transform.localScale = size; g.GetComponent<Renderer>().sharedMaterial = mat;
@@ -121,7 +121,7 @@ public static class JEIFurnitureKit
         });
     }
 
-    static GameObject Rounded(Transform p,string name,Vector3 pos,Vector3 size,Material m,float radius=.07f)
+    public static GameObject Rounded(Transform p,string name,Vector3 pos,Vector3 size,Material m,float radius=.07f)
     { return MeshObject(p,name,pos,RoundedMesh(size,radius),m); }
     static void Collider(Transform t,Vector3 center,Vector3 size) { var c=t.gameObject.AddComponent<BoxCollider>(); c.center=center;c.size=size; }
     static void Legs(Transform p,float width,float depth,float height)
@@ -237,7 +237,7 @@ public static class JEIFurnitureKit
         Collider(g,new Vector3(0,.38f,0),new Vector3(radius*2,.76f,radius*2)); return g;
     }
 
-    static Mesh RingMesh(float outer,float inner,float start,float end,float thickness)
+    public static Mesh RingMesh(float outer,float inner,float start,float end,float thickness)
     {
         string key="Arc_v2_"+Key(outer)+"_"+Key(inner)+"_"+Key(start)+"_"+Key(end)+"_"+Key(thickness);
         return Cached(key,()=>{
