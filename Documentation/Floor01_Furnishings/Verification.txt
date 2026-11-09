@@ -4,7 +4,9 @@ PASS: reception centre route from entrance to corridor.
 PASS: grouped classroom central aisle and cross aisle between all four table groups.
 PASS: teacher-suite entry and glass doorway; approaches to all six window-side writing desks, both large storage cabinets and the beverage/printing counter.
 PASS: administrative entrance moved to X=7.30m; routes reach the two desks, sofa, print/water counter and closed storage.
+PASS: S04 entrance, both rows of meeting seats, both whiteboards, closed cabinet and window-side conversation area are reachable.
 PASS: six writing desks, two large cabinets, one integrated water/coffee/print cabinet and one oval table with four informal chairs are present.
 PASS: two entrance-facing administrative desks, sofa/coffee table, closed entrance cabinet and integrated print/water cabinet; the previous doorway is filled.
-PASS: furnishing is restricted to N02, S01, S02 and S03. Other rooms retain the previous empty structural shell.
-Counts: grouped classroom 4 groups / 16 seats; quiet teacher office 6 workstations plus integrated amenities; shared open teacher meeting/lounge; minimal reception; administrative office 2 entrance-facing workstations, sofa/coffee table and closed storage plus print/water counter.
+PASS: S04 has a 3.20 x 1.35m rectangular meeting table, eight square-backed upholstered meeting chairs, two lounge armchairs, a 2.10 x 1.25m main whiteboard, secondary whiteboard, side table and closed storage; furniture colliders stay inside the room.
+PASS: furnishing is restricted to N02, S01, S02, S03, S04. Other rooms retain the previous empty structural shell.
+Counts: grouped classroom 4 groups / 16 seats; quiet teacher office 6 workstations plus integrated amenities; shared open teacher meeting/lounge; minimal reception; administrative office 2 entrance-facing workstations, sofa/coffee table and closed storage plus print/water counter; S04 eight-seat meeting table and two lounge armchairs.
