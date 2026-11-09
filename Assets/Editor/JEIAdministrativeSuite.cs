@@ -38,8 +38,23 @@ public static class JEIAdministrativeSuite
         entranceCabinet.name="Closed_reference_storage_near_entrance";
         F.Sofa(suite,new Vector3(3.95f,0,-8.15f),270,1.55f,"Sand");
         var coffee=F.RoundTable(suite,new Vector3(4.90f,0,-8.15f),.30f);
-        coffee.name="Small_round_lounge_coffee_table__H0.46m";coffee.localScale=new Vector3(1,.6f,1);
+        ConfigureOvalCoffeeTable(coffee);
         ServiceCabinet(suite);
+    }
+
+    public static void ConfigureOvalCoffeeTable(Transform coffee)
+    {
+        var top=coffee.Find("Rounded circular oak tabletop") ?? coffee.Find("Elliptical oak tabletop");
+        var foot=coffee.Find("Pedestal foot");
+        var collider=coffee.GetComponent<BoxCollider>();
+        if(!top || !foot || !collider) throw new System.InvalidOperationException("The lounge coffee table is incomplete.");
+        coffee.name="Small_oval_lounge_coffee_table__W0.60_L1.00_H0.46m";
+        coffee.localScale=new Vector3(1,.6f,1);
+        // The sofa runs along Z. Elongate the top and foot without stretching the stem.
+        top.name="Elliptical oak tabletop";
+        top.localScale=new Vector3(.60f,.0275f,1.00f);
+        foot.localScale=new Vector3(.255f,.025f,.40f);
+        collider.size=new Vector3(.60f,.76f,1.00f);
     }
 
     static void ServiceCabinet(Transform parent)
