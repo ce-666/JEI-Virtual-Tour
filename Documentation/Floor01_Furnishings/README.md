@@ -2,6 +2,7 @@
 
 调整前版本已备份至个人 fork（7851235），可用于对照和回退。
 
+- N01：24席日常授课教室，12张1.20×0.55m可移动双人桌，4排3列朝东侧实墙；轻便彩色学生椅，东墙白板与教学屏、前侧1.70×0.72m柜式教学讲台（台高0.90m，带前挡板、教材柜、电脑和教学控制面板），后部窗下低资料柜与两块学生作品公告板。
 - N02：4组弧形拼桌，每组4席；展示屏、白板及低资料柜。
 - S01：6张暖木书桌沿南窗（4）与西窗（2）布置，桌面宽1.6–1.8m、深0.8m；相邻桌间为1.12m侧隔板。北墙两大柜各1.6×2.1×0.5m，保留奶油门与蜂蜜木框；原北墙两工位已撤除，向东延伸3.55m一体式茶水/文印柜，包含饮水机、咖啡机、0.65m净操作台、打印机、上下储物和茶水/文印分隔片。安静区仍由到顶玻璃与自动玻璃门围合；玻璃外换为椭圆木讨论桌和4把软包木椅，与原沙发休息区保持共同开放。
 - S02：从南侧入口进入后，右侧小接待台，左侧轻巧沙发；学院标识位于沙发上方，公告栏位于旁边靠入口处。中央进出路线保持畅通。
@@ -10,8 +11,8 @@
 
 其余房间继续保留上一阶段空结构，尚未决定家具。外轮廓、外墙门窗、两座楼梯和两条2.4m公共走廊保持既有结构；S03北门及相邻墙段仅作上述局部调整。
 
-在 Unity 打开 `Assets/Scenes/JEI_Floor01_Structure.unity`。Play后拖拽环绕、滚轮缩放，0总览、1分组教室、2教师办公、3接待、4行政资料、5会议面谈；Tab切换步行，WASD移动，Esc释放鼠标。
+在 Unity 打开 `Assets/Scenes/JEI_Floor01_Structure.unity`。Play后拖拽环绕、滚轮缩放，0总览、1分组教室、2教师办公、3接待、4行政资料、5会议面谈、6普通教室；Tab切换步行，WASD移动，Esc释放鼠标。
 
-单独更新S04：`Tools/JEI/Interiors/Update Meeting Suite Only`；单独更新行政区：`Tools/JEI/Interiors/Update Administrative Suite Only`；仅更新教师区：`Tools/JEI/Interiors/Update Teacher Suite Only`。全量布置入口：`Tools/JEI/Interiors/Apply Agreed Furnishings`。此操作只重建带生成标记的室内布置组，结构生成器与本工具分别保留；若重建结构，请再次应用室内布置。
+单独更新N01：`Tools/JEI/Interiors/Update Regular Classroom Only`；单独更新S04：`Tools/JEI/Interiors/Update Meeting Suite Only`；单独更新行政区：`Tools/JEI/Interiors/Update Administrative Suite Only`；仅更新教师区：`Tools/JEI/Interiors/Update Teacher Suite Only`。全量布置入口：`Tools/JEI/Interiors/Apply Agreed Furnishings`。此操作只重建带生成标记的室内布置组，结构生成器与本工具分别保留；若重建结构，请再次应用室内布置。
 
 所有自建桌椅网格、材质和地面纹理保存为项目资源，非临时对象。玻璃墙表现空间分隔，未进行声学仿真。验证与三维预览位于本目录。

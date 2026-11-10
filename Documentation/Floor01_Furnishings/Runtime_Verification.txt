@@ -2,4 +2,5 @@ PASS: furnished model renders in actual Play mode.
 PASS: perspective overview -> first-person reception -> overview.
 PASS: glass office door starts closed, opens on approach, allows the actual tour controller through, and closes on departure.
 PASS: the actual first-person controller reaches the S04 entrance, all eight meeting-seat approaches, display/whiteboard, closed cabinet and both lounge-chair approaches.
-PASS: the structure remains open-topped for inspection; room-focus shortcuts 0--5 are available.
+PASS: the actual first-person controller reaches the N01 entrance, both main aisles, all 24 student-seat side approaches, teacher position and rear storage/display area.
+PASS: the structure remains open-topped for inspection; room-focus shortcuts 0--6 are available.

@@ -98,6 +98,11 @@ public class JEIStructureView : MonoBehaviour
                 SetFocus(new Vector3(6.65f, 1, -9.35f), 11f);
             else if (keyboard.digit5Key.wasPressedThisFrame)
                 SetFocus(new Vector3(13.9f, 1, -9.35f), 11f);
+            else if (keyboard.digit6Key.wasPressedThisFrame)
+            {
+                SetFocus(new Vector3(-13.55f, 1, 9.35f), 11f);
+                yaw = 90f; pitch = 50f;
+            }
         }
         Mouse mouse = Mouse.current;
         if (mouse == null) return;
@@ -173,11 +178,11 @@ public class JEIStructureView : MonoBehaviour
             hintStyle.normal.textColor = Color.white;
             hintStyle.padding = new RectOffset(11, 9, 8, 6);
         }
-        Rect hintRect = new Rect(16, 16, 385, walking ? 65 : 82);
+        Rect hintRect = new Rect(16, 16, 385, walking ? 65 : 101);
         GUI.Box(hintRect, GUIContent.none);
         string hint = walking
             ? "WALK MODE  |  WASD: move  |  Mouse: look\nEsc: free cursor  |  Tab: return to 3D overview"
-            : "3D OVERVIEW  |  Drag: orbit  |  Scroll: zoom\nTab: enter first-person tour\n0: all  |  1: groups  |  2: teachers\n3: reception  |  4: admin  |  5: meeting";
+            : "3D OVERVIEW  |  Drag: orbit  |  Scroll: zoom\nTab: enter first-person tour\n0: all  |  1: groups  |  2: teachers\n3: reception  |  4: admin  |  5: meeting\n6: regular classroom";
         GUI.Label(hintRect, hint, hintStyle);
     }
 }
