@@ -26,7 +26,7 @@ public static class JEIApprovedInteriors
     static Quaternion runtimeStartRotation;
     static Transform floor, owned;
     static JEIStructureBlockout.Plan plan;
-    static readonly string[] Approved = { "N01", "N02", "N03", "S01", "S02", "S03", "S04" };
+    static readonly string[] Approved = { "N01", "N02", "N03", "N04", "S01", "S02", "S03", "S04" };
 
     static JEIApprovedInteriors() { EditorApplication.update += Poll; }
     static void Poll()
@@ -45,6 +45,7 @@ public static class JEIApprovedInteriors
             if (action == "build") Apply();
             else if (action == "build_n01") ApplyRegularClassroom();
             else if (action == "build_n03") ApplyDigitalClassroom();
+            else if (action == "build_n04") ApplyReadingSuite();
             else if (action == "screen_n03") UpdateDigitalTeachingScreen();
             else if (action == "podium_n01") UpdateTeachingPodium();
             else if (action == "teacher_chair_n01") UpdateRegularTeacherChair();
@@ -57,6 +58,7 @@ public static class JEIApprovedInteriors
             else if (action == "capture") { Capture(); File.WriteAllText(Result, "SUCCESS: furniture previews captured."); }
             else if (action == "capture_n01") { CaptureRegularClassroom(); File.WriteAllText(Result, "SUCCESS: regular-classroom previews captured."); }
             else if (action == "capture_n03") { CaptureDigitalClassroom(); File.WriteAllText(Result, "SUCCESS: digital-classroom previews captured."); }
+            else if (action == "capture_n04") { CaptureReadingSuite(); File.WriteAllText(Result, "SUCCESS: project-studio previews captured."); }
             else if (action == "capture_s01") { CaptureTeacherRevision(); File.WriteAllText(Result, "SUCCESS: teacher-suite previews captured."); }
             else if (action == "capture_s03") { CaptureAdminRevision(); File.WriteAllText(Result, "SUCCESS: administrative-suite previews captured."); }
             else if (action == "capture_s04") { CaptureMeetingRevision(); File.WriteAllText(Result, "SUCCESS: meeting-suite previews captured."); }
@@ -80,6 +82,9 @@ public static class JEIApprovedInteriors
 
     [MenuItem("Tools/JEI/Interiors/Update Digital Classroom Only")]
     public static void ApplyDigitalClassroom() { ApplyRooms("N03"); }
+
+    [MenuItem("Tools/JEI/Interiors/Update N04 Project Studio Only")]
+    public static void ApplyReadingSuite() { ApplyRooms("N04"); }
 
     [MenuItem("Tools/JEI/Interiors/Update N03 Main Teaching Screen Only")]
     public static void UpdateDigitalTeachingScreen()
@@ -326,6 +331,7 @@ public static class JEIApprovedInteriors
             if (id == "N01") JEIRegularClassroom.Build(group);
             else if (id == "N02") JEIGroupedClassroom.Build(group);
             else if (id == "N03") JEIDigitalClassroom.Build(group);
+            else if (id == "N04") JEIReadingSuite.Build(group);
             else if (id == "S01") JEITeacherSuite.Build(group);
             else if (id == "S02") Reception(group);
             else if (id == "S03") Administration(group);
@@ -349,8 +355,8 @@ public static class JEIApprovedInteriors
         AssetDatabase.SaveAssets();
         File.WriteAllText(Output + "/Verification.txt", verification);
         WriteNotes();
-        if (targetRoom == "N03") CaptureDigitalClassroom(); else if (targetRoom == "N01") CaptureRegularClassroom(); else if (targetRoom == "S01") CaptureTeacherRevision(); else if (targetRoom == "S03") CaptureAdminRevision(); else if (targetRoom == "S04") CaptureMeetingRevision(); else Capture();
-        if (targetRoom == "N03") FocusDigitalClassroom(); else if (targetRoom == "N01") FocusRegularClassroom(); else if (targetRoom == "S01") FocusTeacherSuite(); else if (targetRoom == "S03") FocusAdministrativeSuite(); else if (targetRoom == "S04") FocusMeetingSuite(); else FocusModel();
+        if (targetRoom == "N04") CaptureReadingSuite(); else if (targetRoom == "N03") CaptureDigitalClassroom(); else if (targetRoom == "N01") CaptureRegularClassroom(); else if (targetRoom == "S01") CaptureTeacherRevision(); else if (targetRoom == "S03") CaptureAdminRevision(); else if (targetRoom == "S04") CaptureMeetingRevision(); else Capture();
+        if (targetRoom == "N04") FocusReadingSuite(); else if (targetRoom == "N03") FocusDigitalClassroom(); else if (targetRoom == "N01") FocusRegularClassroom(); else if (targetRoom == "S01") FocusTeacherSuite(); else if (targetRoom == "S03") FocusAdministrativeSuite(); else if (targetRoom == "S04") FocusMeetingSuite(); else FocusModel();
         File.WriteAllText(Result, (partial ? "SUCCESS: updated " + targetRoom + " only; the other rooms were preserved.\n" : "SUCCESS: furnished " + string.Join(", ", Approved) + " only.\n") + verification);
         Debug.Log("JEI approved interiors saved locally for review.");
     }
@@ -360,6 +366,7 @@ public static class JEIApprovedInteriors
         if (id == "N01") return "Regular_Classroom";
         if (id == "N02") return "Curved_Group_Tables";
         if (id == "N03") return "Digital_Learning_Classroom";
+        if (id == "N04") return "Reading_and_Seminar";
         if (id == "S01") return "Teacher_Office_and_Open_Lounge";
         if (id == "S02") return "Minimal_Reception";
         if (id == "S04") return "Meeting_and_Tutorial";
@@ -456,9 +463,9 @@ public static class JEIApprovedInteriors
 
     static void DoorPlaque(Transform parent, string id)
     {
-        bool north = id == "N01" || id == "N02" || id == "N03";
-        float x = id == "N01" ? -10.7f : id == "N02" ? -5 : id == "N03" ? 4.5f : id == "S01" ? -8 : id == "S02" ? 0 : id == "S04" ? 13.3f : 7.3f;
-        string title = id == "N01" ? "101  CLASSROOM" : id == "N02" ? "102  GROUP LEARNING" : id == "N03" ? "103  DIGITAL LEARNING" : id == "S01" ? "STAFF OFFICE" : id == "S02" ? "WELCOME" : id == "S04" ? "MEETING / TUTORIAL" : "ADMIN / RECORDS";
+        bool north = id == "N01" || id == "N02" || id == "N03" || id == "N04";
+        float x = id == "N01" ? -10.7f : id == "N02" ? -5 : id == "N03" ? 4.5f : id == "N04" ? 13.3f : id == "S01" ? -8 : id == "S02" ? 0 : id == "S04" ? 13.3f : 7.3f;
+        string title = id == "N01" ? "101  CLASSROOM" : id == "N02" ? "102  GROUP LEARNING" : id == "N03" ? "103  DIGITAL LEARNING" : id == "N04" ? "104  TEAM PROJECT STUDIO" : id == "S01" ? "STAFF OFFICE" : id == "S02" ? "WELCOME" : id == "S04" ? "MEETING / TUTORIAL" : "ADMIN / RECORDS";
         float z = north ? 5.76f : -5.76f;
         F.Box(parent, "Room identification plaque", new Vector3(x, 2.73f, z), new Vector3(id == "S02" ? 2.3f : 2.1f, .3f, .025f), F.Mat("Sign_Deep_Teal", new Color(.13f, .30f, .32f)), false);
         F.WallText(parent, title, new Vector3(x, 2.73f, z + (north ? -.02f : .02f)), north ? 0 : 180, id == "S02" ? 1.7f : 1.78f, new Color(.95f, .94f, .87f));
@@ -537,6 +544,8 @@ public static class JEIApprovedInteriors
             messages.Add("PASS: N01 entrance, two main aisles, all 24 student-seat side approaches, teaching front, teacher position and rear resource/display area are reachable.");
             VerifyDigitalClassroomRoutes(controller);
             messages.Add("PASS: N03 entrance, central and outer aisles, all sixteen computer-seat side approaches, teaching wall, teacher position, rear storage and both project displays are reachable.");
+            VerifyReadingSuiteRoutes(controller);
+            messages.Add("PASS: N04 entrance and open collaboration area, all three movable-chair approaches, both booth access ends, writable wall, window project workbench and team storage are reachable.");
         }
         finally
         {
@@ -603,8 +612,29 @@ public static class JEIApprovedInteriors
             if (bounds.min.x < -.66f || bounds.max.x > 10.31f || bounds.min.z < 5.99f || bounds.max.z > 12.71f) throw new InvalidOperationException("N03 furniture extends beyond the room: " + collider.name);
         }
         messages.Add("PASS: N03 has eight 2.00 x 0.80m warm-oak double computer desks, sixteen properly upholstered task chairs and computers, a cabinet-style teaching podium with teacher chair, one 3.20 x 1.80m main teaching screen, low storage and two student-project boards; furniture stays inside the room.");
+        var reading = root.Find("N04_" + RoomName("N04"));
+        var readingObjects = reading.GetComponentsInChildren<Transform>();
+        var projectSeats = readingObjects.Where(t => t.name.StartsWith("N04_Project_chair_", StringComparison.Ordinal)).ToArray();
+        if (projectSeats.Length != 3 || readingObjects.Count(t => t.name.StartsWith("N04_Booth_seat_", StringComparison.Ordinal)) != 3) throw new InvalidOperationException("N04 needs three movable project chairs and three booth seats.");
+        if (readingObjects.Count(t => t.name.StartsWith("N04_Mobile_table_module_", StringComparison.Ordinal)) != 2 || readingObjects.Count(t => t.name.StartsWith("N04_Member_cubby_", StringComparison.Ordinal)) != 6) throw new InvalidOperationException("N04 needs two joinable project-table modules and six member storage cubbies.");
+        foreach (string name in new[] { "N04_Project_booth", "Booth_north_segment", "Booth_west_return", "N04_Shared_project_table", "N04_Collaboration_whiteboard", "N04_Team_material_storage", "N04_Project_progress_board", "N04_Window_project_workbench", "N04_Team_identity_board", "N04_Team_material_cart" })
+            if (readingObjects.Count(t => t.name == name) != 1) throw new InvalidOperationException("N04 project-studio furniture is incomplete: " + name);
+        if (readingObjects.Any(t => t.name.StartsWith("N04_Study_chair_", StringComparison.Ordinal) || t.name.StartsWith("N04_Reading_armchair_", StringComparison.Ordinal) || t.name.StartsWith("N04_Resource_bookcase_", StringComparison.Ordinal) || t.name=="N04_Oval_reading_coffee_table")) throw new InvalidOperationException("The previous N04 reading-room furniture must be removed.");
+        foreach (var seat in projectSeats)
+        {
+            float yaw = seat.name.EndsWith("03", StringComparison.Ordinal) ? 270 : 0;
+            if (Quaternion.Angle(seat.rotation, Quaternion.Euler(0, yaw, 0)) > .1f) throw new InvalidOperationException("N04 project chairs must face the shared workspace.");
+        }
+        foreach (var collider in reading.GetComponentsInChildren<Collider>())
+        {
+            var bounds = collider.bounds;
+            if (bounds.min.x < 10.49f || bounds.max.x > 17.71f || bounds.min.z < 5.99f || bounds.max.z > 12.71f) throw new InvalidOperationException("N04 furniture extends beyond the room: " + collider.name);
+        }
+        var workbench = readingObjects.Single(t => t.name=="N04_Window_project_workbench");
+        if (workbench.GetComponentsInChildren<Collider>().Any(c => c.bounds.max.y > .90f)) throw new InvalidOperationException("N04 window workbench must remain below the window sill.");
+        messages.Add("PASS: N04 has a three-seat low L-shaped booth, three movable project chairs, two joinable table modules forming a 2.40 x 1.50m workspace, a large writable wall, project-progress board, six member cubbies, window project workbench and material cart; furniture stays inside the room.");
         messages.Add("PASS: furnishing is restricted to " + string.Join(", ", Approved) + ". Other rooms retain the previous empty structural shell.");
-        messages.Add("Counts: N03 digital classroom 8 double computer desks / 16 students; N01 regular classroom 12 double desks / 24 students; grouped classroom 4 groups / 16 seats; quiet teacher office 6 workstations plus integrated amenities; shared open teacher meeting/lounge; minimal reception; administrative office 2 entrance-facing workstations, sofa/coffee table and closed storage plus print/water counter; S04 eight-seat meeting table and two lounge armchairs.");
+        messages.Add("Counts: N04 project studio 3 booth seats / 3 movable chairs / 2 table modules / 6 member cubbies; N03 digital classroom 8 double computer desks / 16 students; N01 regular classroom 12 double desks / 24 students; grouped classroom 4 groups / 16 seats; quiet teacher office 6 workstations plus integrated amenities; shared open teacher meeting/lounge; minimal reception; administrative office 2 entrance-facing workstations, sofa/coffee table and closed storage plus print/water counter; S04 eight-seat meeting table and two lounge armchairs.");
         string report = string.Join("\n", messages); Directory.CreateDirectory(Output); File.WriteAllText(Output + "/Verification.txt", report); return report;
     }
 
@@ -658,6 +688,22 @@ public static class JEIApprovedInteriors
         WalkRoute(controller, new[] { new Vector2(9.43f, 6.4f), new Vector2(9.43f, 7.25f), new Vector2(9.43f, 9.35f), new Vector2(9.43f, 11.45f), new Vector2(9.43f, 12.3f) });
         WalkRoute(controller, new[] { new Vector2(1.4f, 9.35f), new Vector2(.35f, 9.35f), new Vector2(.35f, 8.35f) });
         WalkRoute(controller, new[] { new Vector2(1.4f, 9.35f), new Vector2(1.4f, 10.15f), new Vector2(-.18f, 10.15f), new Vector2(-.18f, 11.0f) });
+    }
+
+    static void VerifyReadingSuiteRoutes(CharacterController controller)
+    {
+        // The booth knee space is for seated use; approaches are from its two open ends.
+        // The entry route turns east before reaching the south chairs.
+        WalkRoute(controller, new[] { new Vector2(13.3f, 4.6f), new Vector2(13.3f, 6.4f), new Vector2(13.3f, 7.55f), new Vector2(16.35f, 7.55f), new Vector2(16.35f, 8.8f), new Vector2(16.35f, 10.2f), new Vector2(16.35f, 11.65f) });
+        foreach (float x in new[] { 12.05f, 14.75f })
+            WalkRoute(controller, new[] { new Vector2(13.3f, 7.55f), new Vector2(x, 7.55f), new Vector2(x, 9.05f) });
+        WalkRoute(controller, new[] { new Vector2(16.35f, 7.55f), new Vector2(16.35f, 9.55f), new Vector2(15.20f, 9.55f) });
+        WalkRoute(controller, new[] { new Vector2(13.3f, 7.55f), new Vector2(11.65f, 7.55f), new Vector2(11.65f, 9.25f) });
+        WalkRoute(controller, new[] { new Vector2(16.35f, 11.65f), new Vector2(14.70f, 11.65f) });
+        WalkRoute(controller, new[] { new Vector2(13.3f, 7.55f), new Vector2(11.10f, 7.55f), new Vector2(11.10f, 8.35f), new Vector2(11.10f, 9.10f) });
+        WalkRoute(controller, new[] { new Vector2(16.35f, 7.55f), new Vector2(16.35f, 8.8f), new Vector2(16.35f, 10.2f), new Vector2(16.35f, 11.4f) });
+        foreach (float x in new[] { 14.75f, 15.55f, 16.35f, 11.65f })
+            WalkRoute(controller, new[] { new Vector2(13.3f, 7.55f), new Vector2(x, 7.55f), new Vector2(x, 7.15f) });
     }
 
     static void FocusModel()
@@ -817,6 +863,36 @@ public static class JEIApprovedInteriors
         finally { Object.DestroyImmediate(obj); }
     }
 
+    static void FocusReadingSuite()
+    {
+        Selection.activeGameObject = null;
+        var view = SceneView.lastActiveSceneView;
+        if (!view) return;
+        view.in2DMode = false; view.sceneLighting = true;
+        view.LookAt(new Vector3(14.1f, .7f, 9.35f), Quaternion.Euler(57, -10, 0), 9.0f, false, true);
+        view.Focus(); view.Repaint();
+    }
+
+    static void CaptureReadingSuite()
+    {
+        RequireScene(); Directory.CreateDirectory(Output);
+        var obj = new GameObject("Temporary team project studio review camera");
+        var camera = obj.AddComponent<Camera>();
+        camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = new Color(.86f, .89f, .90f);
+        camera.nearClipPlane = .05f; camera.farClipPlane = 150;
+        try
+        {
+            Shot(camera, "01_Overview", new Vector3(24, 32, -30), new Vector3(0, .7f, 0), 46);
+            Shot(camera, "45_N04_Project_Studio_Cutaway", new Vector3(14.1f, 9.5f, 7.3f), new Vector3(14.1f, .65f, 9.6f), 67);
+            Shot(camera, "46_N04_Team_Booth", new Vector3(15.7f, 2.3f, 7.55f), new Vector3(12.9f, .95f, 10.65f), 76);
+            Shot(camera, "47_N04_Discussion_Wall", new Vector3(14.3f, 2.0f, 8.0f), new Vector3(10.8f, 1.45f, 8.4f), 76);
+            Shot(camera, "48_N04_Window_Workbench", new Vector3(14.95f, 2.05f, 7.7f), new Vector3(17.1f, .98f, 10.1f), 78);
+            Shot(camera, "49_N04_Studio_From_Entry", new Vector3(13.3f, 2.1f, 6.6f), new Vector3(14.0f, 1.0f, 10.45f), 88);
+            Shot(camera, "51_N04_Team_Storage_and_Progress", new Vector3(14.2f, 2.1f, 9.3f), new Vector3(15.4f, 1.4f, 6.35f), 78);
+        }
+        finally { Object.DestroyImmediate(obj); }
+    }
+
     [MenuItem("Tools/JEI/Interiors/Capture Agreed Interiors")]
     public static void Capture()
     {
@@ -839,6 +915,7 @@ public static class JEIApprovedInteriors
         CaptureMeetingRevision();
         CaptureRegularClassroom();
         CaptureDigitalClassroom();
+        CaptureReadingSuite();
     }
     static void Shot(Camera camera, string name, Vector3 position, Vector3 target, float fieldOfView)
     {
@@ -902,11 +979,15 @@ public static class JEIApprovedInteriors
             Teleport(view.walkPlayer, new Vector3(9.43f, .08f, 9.35f));
             view.walkPlayer.transform.rotation = Quaternion.Euler(0, 270, 0);
             SaveRender(view.walkPlayer.GetComponentInChildren<Camera>(), Output + "/37_N03_Runtime_Digital_Classroom.png");
+            VerifyReadingSuiteRoutes(view.walkPlayer.GetComponent<CharacterController>());
+            Teleport(view.walkPlayer, new Vector3(16.35f, .08f, 7.55f));
+            view.walkPlayer.transform.rotation = Quaternion.Euler(0, 315, 0);
+            SaveRender(view.walkPlayer.GetComponentInChildren<Camera>(), Output + "/50_N04_Runtime_Project_Studio.png");
             Teleport(view.walkPlayer, runtimeStartPosition);
             view.walkPlayer.transform.rotation = runtimeStartRotation;
             view.SendMessage("SetWalking", false, SendMessageOptions.RequireReceiver);
             if (!camera.enabled || view.walkPlayer.activeSelf) throw new InvalidOperationException("Returning to overview failed.");
-            string report = "PASS: furnished model renders in actual Play mode.\nPASS: perspective overview -> first-person reception -> overview.\nPASS: glass office door starts closed, opens on approach, allows the actual tour controller through, and closes on departure.\nPASS: the actual first-person controller reaches the S04 entrance, all eight meeting-seat approaches, display/whiteboard, closed cabinet and both lounge-chair approaches.\nPASS: the actual first-person controller reaches the N01 entrance, both main aisles, all 24 student-seat side approaches, teacher position and rear storage/display area.\nPASS: the actual first-person controller reaches the N03 entrance, all sixteen computer-seat side approaches, front teaching wall, teacher position and rear storage/project displays.\nPASS: the structure remains open-topped for inspection; room-focus shortcuts 0--7 are available.";
+            string report = "PASS: furnished model renders in actual Play mode.\nPASS: perspective overview -> first-person reception -> overview.\nPASS: glass office door starts closed, opens on approach, allows the actual tour controller through, and closes on departure.\nPASS: the actual first-person controller reaches the S04 entrance, all eight meeting-seat approaches, display/whiteboard, closed cabinet and both lounge-chair approaches.\nPASS: the actual first-person controller reaches the N01 entrance, both main aisles, all 24 student-seat side approaches, teacher position and rear storage/display area.\nPASS: the actual first-person controller reaches the N03 entrance, all sixteen computer-seat side approaches, front teaching wall, teacher position and rear storage/project displays.\nPASS: the actual first-person controller reaches the N04 open project area, all three movable-chair approaches, both booth ends, writable wall, window workbench, member storage and material cart.\nPASS: the structure remains open-topped for inspection; room-focus shortcuts 0--8 are available.";
             File.WriteAllText(Output + "/Runtime_Verification.txt", report); File.WriteAllText(Result, "SUCCESS: " + report);
             FinishRuntime();
         }
@@ -928,6 +1009,6 @@ public static class JEIApprovedInteriors
 
     static void WriteNotes()
     {
-        File.WriteAllText(Output + "/README.md", "# 已讨论通过的室内布置\n\n调整前版本已备份至个人 fork（7851235），可用于对照和回退。\n\n- N01：24席日常授课教室，12张1.20×0.55m可移动双人桌，4排3列朝东侧实墙；轻便彩色学生椅，东墙白板与教学屏、前侧1.70×0.72m柜式教学讲台（台高0.90m，带前挡板、教材柜、电脑和教学控制面板），后部窗下低资料柜与两块学生作品公告板。\n- N02：4组弧形拼桌，每组4席；展示屏、白板及低资料柜。\n- N03：16席数字学习室，8张2.00×0.80m暖木双人电脑桌朝西侧教学墙，每席配固定电脑、键鼠和软包工作椅；中央通道约1.10m，两侧约0.80m；前方有柜式讲台、教师椅和一块3.20×1.80m主教学屏（已替换原白板并移除侧面小屏），东侧后部为低资料柜和两块学生项目展示板，走线收于桌下。\n- S01：6张暖木书桌沿南窗（4）与西窗（2）布置，桌面宽1.6–1.8m、深0.8m；相邻桌间为1.12m侧隔板。北墙两大柜各1.6×2.1×0.5m，保留奶油门与蜂蜜木框；原北墙两工位已撤除，向东延伸3.55m一体式茶水/文印柜，包含饮水机、咖啡机、0.65m净操作台、打印机、上下储物和茶水/文印分隔片。安静区仍由到顶玻璃与自动玻璃门围合；玻璃外换为椭圆木讨论桌和4把软包木椅，与原沙发休息区保持共同开放。\n- S02：从南侧入口进入后，右侧小接待台，左侧轻巧沙发；学院标识位于沙发上方，公告栏位于旁边靠入口处。中央进出路线保持畅通。\n- S03：2个行政工位面向+Z入口；西侧为双人沙发和0.60×1.00m椭圆茶几，长边与沙发平行。北侧原书架处改为打印/饮水一体柜，原打印处放封闭资料柜，保留东侧档案柜。北门中心沿+X移至7.3m，宽1.2m不变。\n- S04：3.20×1.35m浅木长方形会议桌和8把方正软包靠背椅，两端各加一席，整套沿+X微移0.10m；东南窗边两把扶手椅与小边几；西侧正对会议桌改为2.10×1.25m大白板，保留旁边小白板，北侧门旁为封闭矮柜。配收拢侧帘及少量绿植，作为小型会议和师生面谈空间的初稿。\n\n其余房间继续保留上一阶段空结构，尚未决定家具。外轮廓、外墙门窗、两座楼梯和两条2.4m公共走廊保持既有结构；S03北门及相邻墙段仅作上述局部调整。\n\n在 Unity 打开 `Assets/Scenes/JEI_Floor01_Structure.unity`。Play后拖拽环绕、滚轮缩放，0总览、1分组教室、2教师办公、3接待、4行政资料、5会议面谈、6普通教室、7数字学习室；Tab切换步行，WASD移动，Esc释放鼠标。\n\n单独更新N03：`Tools/JEI/Interiors/Update Digital Classroom Only`；单独更新N01：`Tools/JEI/Interiors/Update Regular Classroom Only`；单独更新S04：`Tools/JEI/Interiors/Update Meeting Suite Only`；单独更新行政区：`Tools/JEI/Interiors/Update Administrative Suite Only`；仅更新教师区：`Tools/JEI/Interiors/Update Teacher Suite Only`。全量布置入口：`Tools/JEI/Interiors/Apply Agreed Furnishings`。此操作只重建带生成标记的室内布置组，结构生成器与本工具分别保留；若重建结构，请再次应用室内布置。\n\n所有自建桌椅网格、材质和地面纹理保存为项目资源，非临时对象。玻璃墙表现空间分隔，未进行声学仿真。验证与三维预览位于本目录。\n");
+        File.WriteAllText(Output + "/README.md", "# 已讨论通过的室内布置\n\n调整前版本已备份至个人 fork（7851235），可用于对照和回退。\n\n- N01：24席日常授课教室，12张1.20×0.55m可移动双人桌，4排3列朝东侧实墙；轻便彩色学生椅，东墙白板与教学屏、前侧1.70×0.72m柜式教学讲台（台高0.90m，带前挡板、教材柜、电脑和教学控制面板），后部窗下低资料柜与两块学生作品公告板。\n- N02：4组弧形拼桌，每组4席；展示屏、白板及低资料柜。\n- N03：16席数字学习室，8张2.00×0.80m暖木双人电脑桌朝西侧教学墙，每席配固定电脑、键鼠和软包工作椅；中央通道约1.10m，两侧约0.80m；前方有柜式讲台、教师椅和一块3.20×1.80m主教学屏（已替换原白板并移除侧面小屏），东侧后部为低资料柜和两块学生项目展示板，走线收于桌下。\n- N04：6人小组项目工作室，低背L形软包卡座3席与3把活动椅，围合两张可拼接移动桌（总2.40×1.50m）；桌上为共用图纸和低矮模型。西墙大白板供起身讨论，南墙有项目进度板、6个组员储物格及材料抽屉，东窗下为0.86m高共用项目操作台。原阅读扶手椅、茶几、成排书柜、阅读灯与个人书本布置已撤除，保留入口至开放活动区和设备前的通路。\n- S01：6张暖木书桌沿南窗（4）与西窗（2）布置，桌面宽1.6–1.8m、深0.8m；相邻桌间为1.12m侧隔板。北墙两大柜各1.6×2.1×0.5m，保留奶油门与蜂蜜木框；原北墙两工位已撤除，向东延伸3.55m一体式茶水/文印柜，包含饮水机、咖啡机、0.65m净操作台、打印机、上下储物和茶水/文印分隔片。安静区仍由到顶玻璃与自动玻璃门围合；玻璃外换为椭圆木讨论桌和4把软包木椅，与原沙发休息区保持共同开放。\n- S02：从南侧入口进入后，右侧小接待台，左侧轻巧沙发；学院标识位于沙发上方，公告栏位于旁边靠入口处。中央进出路线保持畅通。\n- S03：2个行政工位面向+Z入口；西侧为双人沙发和0.60×1.00m椭圆茶几，长边与沙发平行。北侧原书架处改为打印/饮水一体柜，原打印处放封闭资料柜，保留东侧档案柜。北门中心沿+X移至7.3m，宽1.2m不变。\n- S04：3.20×1.35m浅木长方形会议桌和8把方正软包靠背椅，两端各加一席，整套沿+X微移0.10m；东南窗边两把扶手椅与小边几；西侧正对会议桌改为2.10×1.25m大白板，保留旁边小白板，北侧门旁为封闭矮柜。配收拢侧帘及少量绿植，作为小型会议和师生面谈空间的初稿。\n\n其余房间继续保留上一阶段空结构，尚未决定家具。外轮廓、外墙门窗、两座楼梯和两条2.4m公共走廊保持既有结构；S03北门及相邻墙段仅作上述局部调整。\n\n在 Unity 打开 `Assets/Scenes/JEI_Floor01_Structure.unity`。Play后拖拽环绕、滚轮缩放，0总览、1分组教室、2教师办公、3接待、4行政资料、5会议面谈、6普通教室、7数字学习室、8项目工作室；Tab切换步行，WASD移动，Esc释放鼠标。\n\n单独更新N04：`Tools/JEI/Interiors/Update N04 Project Studio Only`；单独更新N03：`Tools/JEI/Interiors/Update Digital Classroom Only`；单独更新N01：`Tools/JEI/Interiors/Update Regular Classroom Only`；单独更新S04：`Tools/JEI/Interiors/Update Meeting Suite Only`；单独更新行政区：`Tools/JEI/Interiors/Update Administrative Suite Only`；仅更新教师区：`Tools/JEI/Interiors/Update Teacher Suite Only`。全量布置入口：`Tools/JEI/Interiors/Apply Agreed Furnishings`。此操作只重建带生成标记的室内布置组，结构生成器与本工具分别保留；若重建结构，请再次应用室内布置。\n\n所有自建桌椅网格、材质和地面纹理保存为项目资源，非临时对象。玻璃墙表现空间分隔，未进行声学仿真。验证与三维预览位于本目录。\n");
     }
 }

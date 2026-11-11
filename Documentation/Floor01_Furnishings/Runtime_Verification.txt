@@ -4,4 +4,6 @@ PASS: glass office door starts closed, opens on approach, allows the actual tour
 PASS: the actual first-person controller reaches the S04 entrance, all eight meeting-seat approaches, display/whiteboard, closed cabinet and both lounge-chair approaches.
 PASS: the actual first-person controller reaches the N01 entrance, both main aisles, all 24 student-seat side approaches, teacher position and rear storage/display area.
 PASS: the actual first-person controller reaches the N03 entrance, all sixteen computer-seat side approaches, front teaching wall, teacher position and rear storage/project displays.
-PASS: the structure remains open-topped for inspection; room-focus shortcuts 0--7 are available.
+HISTORICAL: the 2026-11-11 13:51 Play run reached the previous N04 reading-room layout. That furniture has since been replaced.
+NOT RUN: the revised N04 team project studio has passed editor-mode CharacterController routes and camera renders; its Play-mode run has not been repeated after the earlier native editor crash.
+PASS: the structure remains open-topped for inspection; room-focus shortcuts 0--8 are available.
