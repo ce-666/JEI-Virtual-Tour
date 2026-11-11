@@ -113,6 +113,11 @@ public class JEIStructureView : MonoBehaviour
                 SetFocus(new Vector3(14.1f, 1, 9.35f), 11.5f);
                 yaw = -10f; pitch = 50f;
             }
+            else if (keyboard.digit9Key.wasPressedThisFrame)
+            {
+                SetFocus(new Vector3(-.3f, 1, .25f), 10.5f);
+                yaw = -15f; pitch = 48f;
+            }
         }
         Mouse mouse = Mouse.current;
         if (mouse == null) return;
@@ -192,7 +197,7 @@ public class JEIStructureView : MonoBehaviour
         GUI.Box(hintRect, GUIContent.none);
         string hint = walking
             ? "WALK MODE  |  WASD: move  |  Mouse: look\nEsc: free cursor  |  Tab: return to 3D overview"
-            : "3D OVERVIEW  |  Drag: orbit  |  Scroll: zoom\nTab: enter first-person tour\n0: all  |  1: groups  |  2: teachers\n3: reception  |  4: admin  |  5: meeting\n6: regular classroom  |  7: digital learning\n8: team project studio";
+            : "3D OVERVIEW  |  Drag: orbit  |  Scroll: zoom\nTab: enter first-person tour\n0: all  |  1: groups  |  2: teachers\n3: reception  |  4: admin  |  5: meeting\n6: regular classroom  |  7: digital learning\n8: team project studio  |  9: courtyard";
         GUI.Label(hintRect, hint, hintStyle);
     }
 }

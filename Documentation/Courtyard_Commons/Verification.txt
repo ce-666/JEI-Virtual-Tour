@@ -1,0 +1,9 @@
+PASS: one low planted island, one small tree, two outward-facing curved timber benches and stone paving are present.
+PASS: the actual CharacterController reaches C04 through its existing south door, follows the complete outer seating loop, reaches the open east side and returns to the public corridor.
+PASS: all 24 original doors, both 2.40m main corridors and both 2.40m courtyard-side links remain unobstructed.
+PASS: all courtyard colliders remain inside C04; the tree canopy stays clear of the walls and below 2.96m.
+PASS: all generated courtyard mesh and material references resolve.
+PASS: one student-art display and two low corner planters are present; the actual CharacterController reaches the artwork viewing point and both planter approaches without blocking the original seating loop or entrance.
+PASS: the artwork remains within its display footprint and below 1.76m; corner planting remains below the existing 0.90m window sills.
+PASS: five real-time 3000K spot lights and luminous diffusers are present: two wall lamps, two hidden bench lights and one artwork accent; no new colliders or blocked routes.
+Scope: editor-mode geometry and collision checks; no Play-mode run performed for this courtyard draft.
