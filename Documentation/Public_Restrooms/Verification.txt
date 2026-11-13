@@ -1,0 +1,7 @@
+PASS: C02 has three toilet cubicles and two washbasins; C03 has two toilet cubicles, two screened urinals and two washbasins.
+PASS: actual editor-mode CharacterController routes enter all five open cubicles, reach every washbasin and both urinals, and return to the public corridors without passing through partitions or fixtures.
+PASS: both restroom entrances retain a near-flush 1mm finish; raycasts across each door confirm no tile step.
+PASS: sightline casts from both sides of the men's entrance toward both urinals first strike the entry privacy screen.
+PASS: 23 walking doorways, both 2.40m main corridors and both courtyard-side links remain unobstructed; the existing reserved lift entrance was not rebuilt.
+PASS: furnishing colliders stay within C02/C03 and all mesh/material references resolve.
+Scope: 3D furnishing draft with cubicle doors shown fixed open for inspection; editor-mode geometry and collision checks, no Play-mode or occupancy/whole-building code certification.

@@ -502,16 +502,17 @@ public static class JEIApprovedInteriors
         RequireScene(); Physics.SyncTransforms();
         var messages = new List<string>();
         var currentPlan = JsonUtility.FromJson<JEIStructureBlockout.Plan>(File.ReadAllText("Assets/JEI_Blockout/Floor01_Plan.json"));
-        int doors = 0;
+        int doors = 0, liftReserves = 0;
         foreach (var wall in currentPlan.walls) foreach (var opening in wall.openings)
         {
             if (opening.kind != "door") continue;
+            if (JEIServiceAreas.IsClosedLiftOpening(wall.axis, wall.at, opening.at)) { liftReserves++; continue; }
             Vector3 center = wall.axis == "H" ? new Vector3(opening.at, 1, wall.at) : new Vector3(wall.at, 1, opening.at);
             Vector3 half = wall.axis == "H" ? new Vector3(opening.width / 2 - .08f, .7f, .07f) : new Vector3(.07f, .7f, opening.width / 2 - .08f);
             foreach (var hit in Physics.OverlapBox(center, half)) if (!(hit is CharacterController)) throw new InvalidOperationException("Door obstructed by " + hit.name + " at " + center);
             doors++;
         }
-        messages.Add("PASS: all " + doors + " original door openings remain unobstructed.");
+        messages.Add("PASS: all " + doors + " walking door openings remain unobstructed; " + liftReserves + " reserved lift entrance(s) remain deliberately closed.");
         foreach (float z in new[] { -4.6f, 4.6f })
             if (Physics.BoxCast(new Vector3(-17.5f, 1, z), new Vector3(.03f, .7f, 1.16f), Vector3.right, out var blocked, Quaternion.identity, 35)) throw new InvalidOperationException("Main corridor obstruction: " + blocked.collider.name);
         messages.Add("PASS: both existing 2.40m clear corridors remain continuous.");
@@ -633,7 +634,7 @@ public static class JEIApprovedInteriors
         var workbench = readingObjects.Single(t => t.name=="N04_Window_project_workbench");
         if (workbench.GetComponentsInChildren<Collider>().Any(c => c.bounds.max.y > .90f)) throw new InvalidOperationException("N04 window workbench must remain below the window sill.");
         messages.Add("PASS: N04 has a three-seat low L-shaped booth, three movable project chairs, two joinable table modules forming a 2.40 x 1.50m workspace, a large writable wall, project-progress board, six member cubbies, window project workbench and material cart; furniture stays inside the room.");
-        messages.Add("PASS: furnishing is restricted to " + string.Join(", ", Approved) + ". Other rooms retain the previous empty structural shell.");
+        messages.Add("PASS: 06_Approved_Interiors remains restricted to " + string.Join(", ", Approved) + ". Additional courtyard and service-area groups are managed separately.");
         messages.Add("Counts: N04 project studio 3 booth seats / 3 movable chairs / 2 table modules / 6 member cubbies; N03 digital classroom 8 double computer desks / 16 students; N01 regular classroom 12 double desks / 24 students; grouped classroom 4 groups / 16 seats; quiet teacher office 6 workstations plus integrated amenities; shared open teacher meeting/lounge; minimal reception; administrative office 2 entrance-facing workstations, sofa/coffee table and closed storage plus print/water counter; S04 eight-seat meeting table and two lounge armchairs.");
         string report = string.Join("\n", messages); Directory.CreateDirectory(Output); File.WriteAllText(Output + "/Verification.txt", report); return report;
     }

@@ -1,0 +1,7 @@
+PASS: C05 cleaner/store, C07 accessible washroom and C08 IT/services are furnished; C06 has a static closed landing-door facade only.
+PASS: the full 1.525m C07 turning square, the 0.76 x 1.22m side-transfer strip and a 0.76m-wide lavatory knee space up to 0.685m above the finish remain clear of physical obstacles.
+PASS: service finishes are only 1mm above the structural corridor floor; downward raycasts across the C07 doorway confirm no raised tile step.
+PASS: actual editor-mode CharacterController routes reach storage, the washroom turning point, WC transfer side, washbasin, network rack and lift approach, then return to the corridors.
+PASS: 23 original walking doorways, both 2.40m main corridors and both courtyard-side links remain unobstructed; the reserved shaft is behind a deliberately closed lift entrance.
+PASS: furnishing colliders remain within their service rooms, with valid persistent mesh/material references.
+Scope: 3D design draft and editor-mode geometry/collision checks, not an accessibility certification; no Play-mode run or functional lift simulation performed.

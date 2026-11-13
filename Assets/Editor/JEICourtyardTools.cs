@@ -209,10 +209,11 @@ public static class JEICourtyardTools
         foreach (var renderer in owned.GetComponentsInChildren<Renderer>())
             if (renderer.sharedMaterials.Any(m => !m)) throw new InvalidOperationException("A courtyard material is missing: " + renderer.name);
         var plan = JsonUtility.FromJson<JEIStructureBlockout.Plan>(File.ReadAllText("Assets/JEI_Blockout/Floor01_Plan.json"));
-        int doors = 0;
+        int doors = 0, liftReserves = 0;
         foreach (var wall in plan.walls) foreach (var opening in wall.openings)
         {
             if (opening.kind != "door") continue;
+            if (JEIServiceAreas.IsClosedLiftOpening(wall.axis, wall.at, opening.at)) { liftReserves++; continue; }
             bool horizontal = wall.axis == "H";
             var center = horizontal ? new Vector3(opening.at, 1, wall.at) : new Vector3(wall.at, 1, opening.at);
             var half = horizontal ? new Vector3(opening.width / 2 - .08f, .7f, .07f) : new Vector3(.07f, .7f, opening.width / 2 - .08f);
@@ -265,7 +266,7 @@ public static class JEICourtyardTools
         }
         string report = "PASS: one low planted island, one small tree, two outward-facing curved timber benches and stone paving are present.\n" +
             "PASS: the actual CharacterController reaches C04 through its existing south door, follows the complete outer seating loop, reaches the open east side and returns to the public corridor.\n" +
-            "PASS: all " + doors + " original doors, both 2.40m main corridors and both 2.40m courtyard-side links remain unobstructed.\n" +
+            "PASS: all " + doors + " walking doorways, both 2.40m main corridors and both 2.40m courtyard-side links remain unobstructed; " + liftReserves + " reserved lift entrance(s) remain deliberately closed.\n" +
             "PASS: all courtyard colliders remain inside C04; the tree canopy stays clear of the walls and below 2.96m.\n" +
             "PASS: all generated courtyard mesh and material references resolve.\n" +
             "PASS: one student-art display and two low corner planters are present; the actual CharacterController reaches the artwork viewing point and both planter approaches without blocking the original seating loop or entrance.\n" +

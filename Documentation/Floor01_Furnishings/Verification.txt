@@ -1,4 +1,4 @@
-PASS: all 24 original door openings remain unobstructed.
+PASS: all 23 walking door openings remain unobstructed; 1 reserved lift entrance(s) remain deliberately closed.
 PASS: both existing 2.40m clear corridors remain continuous.
 PASS: reception centre route from entrance to corridor.
 PASS: grouped classroom central aisle and cross aisle between all four table groups.
@@ -14,5 +14,5 @@ PASS: S04 has a 3.20 x 1.35m rectangular meeting table, eight square-backed upho
 PASS: N01 has twelve movable double desks, twenty-four student chairs, a 1.70 x 0.72m teaching podium with closed front/storage and AV controls, teacher chair, whiteboard/display, low storage and two student-work boards; furniture stays inside the room.
 PASS: N03 has eight 2.00 x 0.80m warm-oak double computer desks, sixteen properly upholstered task chairs and computers, a cabinet-style teaching podium with teacher chair, one 3.20 x 1.80m main teaching screen, low storage and two student-project boards; furniture stays inside the room.
 PASS: N04 has a three-seat low L-shaped booth, three movable project chairs, two joinable table modules forming a 2.40 x 1.50m workspace, a large writable wall, project-progress board, six member cubbies, window project workbench and material cart; furniture stays inside the room.
-PASS: furnishing is restricted to N01, N02, N03, N04, S01, S02, S03, S04. Other rooms retain the previous empty structural shell.
+PASS: 06_Approved_Interiors remains restricted to N01, N02, N03, N04, S01, S02, S03, S04. Additional courtyard and service-area groups are managed separately.
 Counts: N04 project studio 3 booth seats / 3 movable chairs / 2 table modules / 6 member cubbies; N03 digital classroom 8 double computer desks / 16 students; N01 regular classroom 12 double desks / 24 students; grouped classroom 4 groups / 16 seats; quiet teacher office 6 workstations plus integrated amenities; shared open teacher meeting/lounge; minimal reception; administrative office 2 entrance-facing workstations, sofa/coffee table and closed storage plus print/water counter; S04 eight-seat meeting table and two lounge armchairs.

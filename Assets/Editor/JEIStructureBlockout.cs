@@ -438,17 +438,18 @@ public static class JEIStructureBlockout
     static string VerifyGeometry()
     {
         var messages = new List<string>();
-        int passages = 0;
+        int passages = 0, liftReserves = 0;
         foreach (var w in plan.walls) foreach (var opening in w.openings)
         {
             if (opening.kind != "door") continue;
+            if (JEIServiceAreas.IsClosedLiftOpening(w.axis, w.at, opening.at)) { liftReserves++; continue; }
             Vector3 center = w.axis == "H" ? new Vector3(opening.at, 1.0f, w.at) : new Vector3(w.at, 1.0f, opening.at);
             Vector3 half = w.axis == "H" ? new Vector3(opening.width / 2 - .08f, .7f, .08f) : new Vector3(.08f, .7f, opening.width / 2 - .08f);
             foreach (var hit in Physics.OverlapBox(center, half))
                 if (!(hit is CharacterController)) throw new InvalidOperationException("Door is obstructed: " + center + " by " + hit.name);
             passages++;
         }
-        messages.Add("PASS: " + passages + " door openings unobstructed at pedestrian height.");
+        messages.Add("PASS: " + passages + " walking door openings unobstructed at pedestrian height; " + liftReserves + " reserved lift entrance(s) deliberately closed.");
         foreach (float z in new[] { -4.6f, 4.6f })
             if (Physics.BoxCast(new Vector3(-17.5f, 1, z), new Vector3(.03f, .7f, 1.16f), Vector3.right, out var hit, Quaternion.identity, 35))
                 throw new InvalidOperationException("2.40m corridor obstructed by " + hit.collider.name);
